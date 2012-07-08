@@ -29,9 +29,6 @@ ARP_timeout		dd 0x10000000		; After this time, ARP entry must be refreshed
 os_icmp_callback	dq 0x00000000000000000	; Point to ICMP reciever call back fundtion
 
 ; Memory addresses
-os_ip_rx_buffer		equ 0x000000000004EC00	; 2048 bytes
-os_ip_tx_buffer		equ 0x000000000006F400	; 2048 butes
-arp_table		equ 0x000000000006FC00  ; 1024 bytes	0x06FC00 -> 0x06FFFF
 hdbuffer0:		equ 0x0000000000070000	; 32768 bytes	0x070000 -> 0x077FFF
 hdbuffer1:		equ 0x0000000000078000	; 32768 bytes	0x078000 -> 0x07FFFF
 cli_temp_string:	equ 0x0000000000080000	; 1024 bytes	0x080000 -> 0x0803FF
@@ -101,8 +98,6 @@ os_NetEnabled:		equ os_SystemVariables + 394	; 1 if a supported network card was
 os_NetIRQ:		equ os_SystemVariables + 395	; Set to Interrupt line that NIC is connected to
 os_NetActivity_TX:	equ os_SystemVariables + 396
 os_NetActivity_RX:	equ os_SystemVariables + 397
-os_EthernetBuffer_C1:	equ os_SystemVariables + 398	; Counter 1 for the Ethernet RX Ring Buffer
-os_EthernetBuffer_C2:	equ os_SystemVariables + 399	; Counter 2 for the Ethernet RX Ring Buffer
 
 
 cpuqueuemax:		dw 256

@@ -170,31 +170,13 @@ network:
 network_rx_as_well:
 	mov byte [os_NetActivity_RX], 1
 
-	; Max size of Ethernet packet: 1518
-	; + size: 2 = 1520 = 0x5F0
-	; Set each element size to 0x800 (2048). 262144 byte buffer / 2048 = room for 128 packets
-	; Deal with the received packet
-	; Get current offset in the ring buffer
 	mov rdi, os_EthernetBuffer
-	xor rax, rax
-	mov al, byte [os_EthernetBuffer_C2]
-	push rax			; Save the ring element value
-	shl rax, 11			; Quickly multiply RAX by 2048
-	add rdi, rax
 	push rdi
 	add rdi, 2
 	call os_ethernet_rx_from_interrupt
 	pop rdi
 	mov rax, rcx
 	stosw				; Store the size of the packet
-	; increment the offset in the ring buffer
-	pop rax				; Restore the ring element value
-	add al, 1
-	cmp al, 128			; Max element number is 127
-	jne network_rx_buffer_nowrap
-	xor al, al
-network_rx_buffer_nowrap:
-	mov byte [os_EthernetBuffer_C2], al
 	jmp network_end
 
 network_tx:

@@ -207,7 +207,6 @@ os_ethernet_tx_raw_fail:
 os_ethernet_rx:
 	push rdi
 	push rsi
-	push rdx
 	push rax
 
 	xor ecx, ecx
@@ -215,36 +214,20 @@ os_ethernet_rx:
 	cmp byte [os_NetEnabled], 1
 	jne os_ethernet_rx_fail
 
-; Is there anything in the ring buffer?
-	mov al, byte [os_EthernetBuffer_C1]
-	mov dl, byte [os_EthernetBuffer_C2]
-	cmp al, dl				; If both counters are equal then the buffer is empty
-	je os_ethernet_rx_fail
-
 ; Read the packet from the ring buffer to RDI
 	mov rsi, os_EthernetBuffer
-	xor rax, rax
-	mov al, byte [os_EthernetBuffer_C1]
-	push rax				; Save the ring element value
-	shl rax, 11				; Quickly multiply RAX by 2048
-	add rsi, rax				; RSI points to the packet in the ring buffer
 	lodsw					; Load the packet length
+	mov [rsi-2], cx				; Clear the packet length
 	mov cx, ax				; Copy the packet length to RCX
+	cmp cx, 0x0000
+	je os_ethernet_rx_fail
 	push rcx
 	rep movsb				; Copy the packet to RDI
 	pop rcx
-	pop rax					; Restore the ring element value
-	add al, 1
-	cmp al, 128				; Max element number is 127
-	jne os_ethernet_rx_buffer_nowrap
-	xor al, al
-os_ethernet_rx_buffer_nowrap:
-	mov byte [os_EthernetBuffer_C1], al
 
 os_ethernet_rx_fail:
 
 	pop rax
-	pop rdx
 	pop rsi
 	pop rdi
 	ret

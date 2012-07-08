@@ -526,10 +526,10 @@ noargs:
 
 
 ; Includes
-%include "init_64.asm"
-%include "init_pci.asm"
-%include "init_net.asm"
-%include "init_hdd.asm"
+%include "init/64.asm"
+%include "init/pci.asm"
+%include "init/net.asm"
+%include "init/hdd.asm"
 %include "syscalls.asm"
 %include "drivers.asm"
 %include "interrupt.asm"
