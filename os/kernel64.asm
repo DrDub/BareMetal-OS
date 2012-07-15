@@ -533,6 +533,7 @@ noargs:
 %include "syscalls.asm"
 %include "drivers.asm"
 %include "interrupt.asm"
+%include "ipv4.asm"
 %include "cli.asm"
 %include "sysvar.asm"			; Include this last to keep the read/write variables away from the code
 
