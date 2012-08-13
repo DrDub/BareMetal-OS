@@ -64,6 +64,7 @@ os_net_ack_int:		equ os_SystemVariables + 0x48
 os_NetIOBaseMem:	equ os_SystemVariables + 0x50
 os_NetMAC:		equ os_SystemVariables + 0x58
 os_HPETAddress:		equ os_SystemVariables + 0x60
+os_NetworkCallback:	equ os_SystemVariables + 0x68
 
 ; DD - Starting at offset 128, increments by 4
 cpu_speed:		equ os_SystemVariables + 128	; in MHz

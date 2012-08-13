@@ -389,6 +389,8 @@ start:
 	mov rsi, networkmsg
 	call os_print_string
 	call os_debug_dump_MAC	
+	mov rbx, hellofunc
+	mov [os_NetworkCallback], rbx
 start_no_network:
 
 	mov ax, 0x0016			; Print the "ready" message
@@ -524,6 +526,12 @@ noargs:
 
 	jmp ap_clear			; Reset the stack, clear the registers, and wait for something else to work on
 
+hellofunc:
+	push rsi
+	mov rsi, readymsg
+	call os_print_string
+	pop rsi
+	ret
 
 ; Includes
 %include "init/64.asm"

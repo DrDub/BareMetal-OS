@@ -156,9 +156,8 @@ align 16
 network:
 	push rdi
 	push rsi
-	push rcx
+	push rbx
 	push rax
-	pushfq
 
 	cld				; Clear direction flag
 	call os_ethernet_ack_int	; Call the driver function to acknowledge the interrupt internally
@@ -170,13 +169,42 @@ network:
 network_rx_as_well:
 	mov byte [os_NetActivity_RX], 1
 
-	mov rdi, os_EthernetBuffer
+	mov rdi, os_EthernetBuffer	; Raw packet is copied here
 	push rdi
 	add rdi, 2
 	call os_ethernet_rx_from_interrupt
 	pop rdi
 	mov rax, rcx
 	stosw				; Store the size of the packet
+	mov rbx, [os_NetworkCallback]	; Load the system callback for network interrupts
+	cmp rbx, 0			; Is it valid?
+	je network_end			; If not then bail out.
+
+	mov rsi, rsp
+	sub rsp, 8
+	mov rdi, rsp
+	lodsq	; RAX
+	stosq
+	lodsq	; RBX
+	stosq
+	lodsq	; RSI
+	stosq
+	lodsq	; RDI
+	stosq
+	lodsq	; RIP
+	xchg rax, rbx
+	stosq	; Fudge
+	lodsq	; CS
+	stosq
+	lodsq	; Flags
+	stosq
+	lodsq	; RSP
+	sub rax, 8
+	stosq
+	lodsq	; SS
+	stosq
+	xchg rax, rbx
+	stosq
 	jmp network_end
 
 network_tx:
@@ -190,9 +218,8 @@ network_end:
 	xor eax, eax
 	stosd
 
-	popfq
 	pop rax
-	pop rcx
+	pop rbx
 	pop rsi
 	pop rdi
 	iretq
