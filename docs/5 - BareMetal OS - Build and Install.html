@@ -58,7 +58,7 @@ pre {background-color:#FAFAFA; border:1px solid #DADADA; margin-bottom:6px; padd
 <img src="images/hex1.png"></img>
 <p>The infomation for the first partition starts at 0x1BE and the LBA start of the partition is a 32-bit value at 0x1C6. 0x80000000 is actually 0x00000008 as it needs to be converted to <a href="http://en.wikipedia.org/wiki/Endian#Examples_of_storing_the_value_0A0B0C0Dh_in_memory">Big-endian</a>. In the example screenshot the first sector of the first partition is 128 (0x80). More information on MBR can be found here: <a href="http://en.wikipedia.org/wiki/Master_boot_record">MBR layout</a></p>
 <img src="images/hex2.png"></img>
-<p>Using the hex editor go to the first sector of the first partition. Overwrite bytes 0x3E - 0x1FD of the boot sector with the boot sector from Pure64's FAT16 boot sector (boot16b.bin).</p>
+<p>Using the hex editor go to the first sector of the first partition. Overwrite bytes 0x3E - 0x1FD of the boot sector with the boot sector from <a href="http://www.returninfinity.com/pure64.html">Pure64</a>'s FAT16 boot sector (boot16b.bin).</p>
 <p>Copy pure64.sys and kernel64.sys to the hard drive.</p>
 <p>Install the hard drive into the computer making sure the hard drive is on the primary IDE channel and that the drive is set to master.</p>
 
